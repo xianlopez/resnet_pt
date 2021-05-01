@@ -68,7 +68,6 @@ class ResNet18(nn.Module):
         self.layer5 = ResnetLayerSimple(256, 2, True)
         self.avg_pool = nn.AvgPool2d(7)
         self.dense = nn.Linear(512, nclasses)
-        self.softmax = nn.Softmax(1)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -80,5 +79,4 @@ class ResNet18(nn.Module):
         x = self.avg_pool(x)
         x = torch.squeeze(x)  # TODO: Be careful if batch size is 1!
         x = self.dense(x)
-        x = self.softmax(x)
         return x
