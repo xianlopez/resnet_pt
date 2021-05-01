@@ -1,5 +1,6 @@
 from data_reader import ImageNetDataset, create_pad_and_resize_transform
 from models import ResNet18
+from accuracy import compute_accuracy
 from torch import nn, optim
 from torch.utils.data import DataLoader
 import torch
@@ -28,7 +29,6 @@ for epoch in range(2):  # loop over the dataset multiple times
     running_loss = 0.0
     print('epoch ' + str(epoch))
     for i, data in enumerate(train_dataloader, 0):
-        print('i = ' + str(i))
         # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
 
@@ -43,6 +43,9 @@ for epoch in range(2):  # loop over the dataset multiple times
         loss = loss_fun(outputs, labels)
         loss.backward()
         optimizer.step()
+
+        acc = compute_accuracy(outputs, labels)
+        print('step %i,  loss: %.2e,  accuracy: %.2f' % (i, loss, acc))
 
         # print statistics
         running_loss += loss.item()
