@@ -86,6 +86,9 @@ class ImageNetDataset(Dataset):
         if len(image.shape) == 2:
             image = np.expand_dims(image, axis=-1)
             image = np.tile(image, [1, 1, 3])
+        elif len(image.shape) == 3 and image.shape[2] == 4:
+            # The fourth channel is probably the alpha, just ignore it.
+            image = image[:, :, :3]
         assert len(image.shape) == 3
         assert image.shape[2] == 3
 
