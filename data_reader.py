@@ -1,7 +1,7 @@
 import os
 import torch
 from torchvision import transforms
-from skimage import io, util, transform
+from skimage import io, transform
 from torch.utils.data import Dataset, DataLoader
 from lxml import etree
 import numpy as np
@@ -110,7 +110,7 @@ class PadToSquare:
         top = int((max_side - height) / 2)
         bottom = max_side - height - top
 
-        image = util.pad(image, ((top, bottom), (left, right), (0, 0)))
+        image = np.pad(image, ((top, bottom), (left, right), (0, 0)))
 
         return (image, label)
 
