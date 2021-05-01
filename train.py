@@ -4,6 +4,7 @@ from accuracy import compute_accuracy
 from torch import nn, optim
 from torch.utils.data import DataLoader
 import torch
+import time
 
 
 data_path = '/home/xian/ImageNet'
@@ -24,13 +25,13 @@ model = ResNet18(1000).to(device)
 loss_fun = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-4)
 
-for epoch in range(2):  # loop over the dataset multiple times
-    running_loss = 0.0
-    print('epoch ' + str(epoch))
+nepochs = 100
+for epoch in range(nepochs):
+    epoch_start = time.time()
+    print('')
+    print('Epoch ' + str(epoch))
     for i, data in enumerate(train_dataloader, 0):
-        # get the inputs; data is a list of [inputs, labels]
         inputs, labels = data
-
         inputs = inputs.to(device)
         labels = labels.to(device)
 
@@ -43,14 +44,11 @@ for epoch in range(2):  # loop over the dataset multiple times
         loss.backward()
         optimizer.step()
 
-        acc = compute_accuracy(outputs, labels)
-        print('step %i,  loss: %.2e,  accuracy: %.2f' % (i, loss, acc))
+        if i % 100 == 0:
+            acc = compute_accuracy(outputs, labels)
+            print('step %i,  loss: %.2e,  accuracy: %.2f' % (i, loss, acc))
 
-        # print statistics
-        running_loss += loss.item()
-        if i % 2000 == 1999:    # print every 2000 mini-batches
-            print('[%d, %5d] loss: %.3f' %
-                  (epoch + 1, i + 1, running_loss / 2000))
-            running_loss = 0.0
+    epoch_time = time.time() - epoch_start
+    print('Epoch computed in %i s' % int(round(time.time() - epoch_start)))
 
 print('Finished Training')
