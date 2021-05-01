@@ -10,7 +10,7 @@ data_path = '/home/xian/ImageNet'
 train_transform = create_pad_and_resize_transform(224)
 train_dataset = ImageNetDataset(data_path, 'train', train_transform)
 # train_dataset = ImageNetDataset(data_path, 'train', None)
-train_dataloader = DataLoader(train_dataset, batch_size=128, shuffle=True, num_workers=0)
+train_dataloader = DataLoader(train_dataset, batch_size=256, shuffle=True, num_workers=6)
 
 if torch.cuda.is_available():
     device = torch.device("cuda:0")
