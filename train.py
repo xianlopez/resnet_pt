@@ -22,7 +22,7 @@ else:
 model = ResNet18(1000).to(device)
 
 loss_fun = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9)
+optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=1e-4)
 
 for epoch in range(2):  # loop over the dataset multiple times
     running_loss = 0.0
