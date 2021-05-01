@@ -127,6 +127,19 @@ class Rescale:
         return (image, label)
 
 
+class SubtractMean:
+    def __init__(self):
+        self.image_means = np.array([123.0, 117.0, 104.0]).astype(np.float32)
+        self.image_means /= 255.0
+        self.image_means = np.reshape(self.image_means, [1, 1, 3])
+        # self.image_means = np.tile(self.image_means, [224, 224, 1])
+
+    def __call__(self, sample):
+        image, label = sample
+        image = image - self.image_means
+        return (image, label)
+
+
 class ToTensor:
     def __call__(self, sample):
         image, label = sample
@@ -138,8 +151,6 @@ class ToTensor:
         return sample
 
 
-def create_pad_and_resize_transform(output_size):
-    # TODO: subtract mean
-    # TODO: from 0:255 to 0:1  ????  Maybe it's already done
-    pad_and_resize = transforms.Compose([PadToSquare(), Rescale(output_size), ToTensor()])
-    return pad_and_resize
+def get_transforms(output_size):
+    transform = transforms.Compose([PadToSquare(), Rescale(output_size), SubtractMean(), ToTensor()])
+    return transform

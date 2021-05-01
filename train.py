@@ -1,4 +1,4 @@
-from data_reader import ImageNetDataset, create_pad_and_resize_transform
+from data_reader import ImageNetDataset, get_transforms
 from models import ResNet18
 from accuracy import compute_accuracy
 from torch import nn, optim
@@ -8,9 +8,8 @@ import torch
 
 data_path = '/home/xian/ImageNet'
 
-train_transform = create_pad_and_resize_transform(224)
+train_transform = get_transforms(224)
 train_dataset = ImageNetDataset(data_path, 'train', train_transform)
-# train_dataset = ImageNetDataset(data_path, 'train', None)
 train_dataloader = DataLoader(train_dataset, batch_size=256, shuffle=True, num_workers=6)
 
 if torch.cuda.is_available():
